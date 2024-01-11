@@ -322,20 +322,8 @@ class Launcher {
 
     // We always look at the earliest period available so that reports come in chronological order
     const earliestPeriodAvailable = Object.keys(this.metricsByPeriod)
-      .filter((x) => this.periodsReportedFor.indexOf(x) === -1)
       .sort()[0];
 
-    // TODO: better name. One above is earliestNotAlreadyReported
-    const earliest = Object.keys(this.metricsByPeriod).sort()[0];
-    if (this.periodsReportedFor.indexOf(earliest) > -1) {
-      global.artillery.log(
-        'Warning: multiple batches of metrics for period',
-        earliest,
-        new Date(Number(earliest))
-      );
-
-      delete this.metricsByPeriod[earliest]; // FIXME: need to merge them in for the final report
-    }
 
     // Dynamically adjust the duration we're willing to wait for. This matters on SQS where messages are received
     // in batches of 10 and more workers => need to wait longer.
